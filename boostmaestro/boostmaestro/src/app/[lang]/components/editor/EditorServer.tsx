@@ -42,8 +42,8 @@ async function fetchParagraph(documentId: string, locale: Locale) {
 
 async function EditorServer({ initialLocale, documentId, className }: { initialLocale: Locale, documentId: string, className?: string }) {
 
-    // const result = await getParagraphJson(documentId, initialLocale) as Reponse
-    const result = await fetchParagraph(documentId, initialLocale) as Reponse
+    // const result = await getParagraphJson(documentId, initialLocale) as Reponse  // SSG
+    const result = await fetchParagraph(documentId, initialLocale) as Reponse  // ISR
 
     // Check if result is null and handle it
     if (!result) {

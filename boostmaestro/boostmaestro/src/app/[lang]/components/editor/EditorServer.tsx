@@ -20,7 +20,7 @@ async function fetchParagraph(documentId: string, locale: Locale) {
                 'Content-Type': 'application/json',
                 'Document-ID': documentId,
                 'Locale': locale,
-                'api-key': process.env.ADMIN_PASSWORD!
+                // 'api-key': process.env.ADMIN_PASSWORD!
             },
             next: {
                 tags: [`fetch-paragraph-${documentId}`]

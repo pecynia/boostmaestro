@@ -37,5 +37,5 @@ interface SocialMedia {
 }
 
 export const socialMedia: SocialMedia = {
-    linkedin: "https://www.linkedin.com/in/guuskrabbenborg",
+    linkedin: "https://www.linkedin.com/in/",
 }

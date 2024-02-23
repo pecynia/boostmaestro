@@ -17,7 +17,7 @@ function EventOverview({ lang, agenda, allEvents }: { lang: Locale, agenda: any,
     useEffect(() => {
         const lenis = new Lenis({
             lerp: 0.1,
-            smoothTouch: true,
+            // smoothTouch: true,
             normalizeWheel: true,
         })
 

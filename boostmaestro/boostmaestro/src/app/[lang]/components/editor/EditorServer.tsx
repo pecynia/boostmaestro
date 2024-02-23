@@ -1,6 +1,6 @@
-import { getParagraphJson } from '@/lib/utils/db'
+// import { getParagraphJson } from '@/lib/utils/db'
 
-import React from 'react'
+// import React from 'react'
 import { Locale } from '@../../../i18n.config'
 import EditorContent from '@/app/[lang]/components/editor/EditorContent'
 import OpenEditorButton from '@/app/[lang]/components/editor/OpenEditorButton'
@@ -25,7 +25,7 @@ async function fetchParagraph(documentId: string, locale: Locale) {
             next: {
                 tags: [`fetch-paragraph-${documentId}`]
             },
-            cache: 'no-cache'
+            // cache: 'no-cache'
         })
 
         if (!response.ok) {

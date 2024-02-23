@@ -40,7 +40,7 @@ const ReviewOverview: React.FC<{ lang: Locale, review: ReviewProps }> = ({ lang,
     useEffect(() => {
         const lenis = new Lenis({
             lerp: 0.1,
-            smoothTouch: true,
+            // smoothTouch: true,
             normalizeWheel: true,
         })
 

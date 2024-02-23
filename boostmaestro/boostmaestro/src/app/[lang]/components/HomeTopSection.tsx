@@ -19,7 +19,7 @@ const HomeTopSection: React.FC<{ lang: Locale }> = ({ lang }) => {
     useEffect(() => {
         const lenis = new Lenis({
             lerp: 0.1,
-            smoothTouch: true,
+            // smoothTouch: true,
             normalizeWheel: true,
         })
 

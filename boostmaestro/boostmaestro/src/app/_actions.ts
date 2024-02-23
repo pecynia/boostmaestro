@@ -27,8 +27,8 @@ export async function sendContactEmail(data: ContactFormInputs) {
     const { companyName, name, email, message } = result.data
     try {
       const emailData = await resend.emails.send({
-        from: 'ERP Masterclass <contact@erpmasterclasses.com>',
-        to: ['gk@dynamicsandmore.com'],
+        from: 'Boost Maestro <contact@boostmaestro.com>',
+        to: ['verheul.nicolai@gmail.com'],
         subject: 'Contact form submission',
         text: `Company Name: ${companyName}\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
         react: ContactFormEmail({ companyName, name, email, message }),
@@ -46,8 +46,8 @@ export async function sendContactEmail(data: ContactFormInputs) {
 export async function sendRegistrationEmail(data: RegistrationFormProps, event: EventProps) {
   try {
     const emailData = await resend.emails.send({
-      from: 'ERP Masterclass <registrations@erpmasterclasses.com>',
-      to: ['gk@erpmasterclasses.com'],
+      from: 'Boost Maestro <contact@boostmaestro.com>',
+      to: ['verheul.nicolai@gmail.com'],
       subject: 'Registration form submission',
       text: `Event: ${event.title}\nCompany Name: ${data.companyName}\nAdress: ${data.address}\nCountry: ${data.country}\nName: ${data.nameParticipant}\nPhone: ${data.phone}\nEmail: ${data.email}\nPosition: ${data.position}\nVAT number: ${data.vatNumber}\nPO number: ${data.poNumber}\nAdditional participants: ${data.additionalParticipants}`,
       react: RegistrationFormEmail({ ...data }),
@@ -63,7 +63,7 @@ export async function sendRegistrationEmail(data: RegistrationFormProps, event: 
 export async function sendRegistrationConfirmationEmail(data: RegistrationFormProps, totalAmount: number) {
   try {
     const emailData = await resend.emails.send({
-      from: 'ERP Masterclass <contact@erpmasterclasses.com>',
+      from: 'Boost Maestro <registrations@boostmaestro.com>',
       to: data.email,
       subject: 'Your Registration Confirmation',
       text: `Event: ${data.selectedEvent.title}\nCompany Name: ${data.companyName}\nAdress: ${data.address}\nCountry: ${data.country}\nName: ${data.nameParticipant}\nPhone: ${data.phone}\nEmail: ${data.email}\nPosition: ${data.position}\nVAT number: ${data.vatNumber}\nPO number: ${data.poNumber}\nAdditional participants: ${data.additionalParticipants}`,

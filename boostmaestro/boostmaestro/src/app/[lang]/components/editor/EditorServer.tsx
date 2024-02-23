@@ -1,6 +1,3 @@
-// import { getParagraphJson } from '@/lib/utils/db'
-
-// import React from 'react'
 import { Locale } from '@../../../i18n.config'
 import EditorContent from '@/app/[lang]/components/editor/EditorContent'
 import OpenEditorButton from '@/app/[lang]/components/editor/OpenEditorButton'
@@ -14,7 +11,8 @@ type Reponse = {
 
 async function fetchParagraph(documentId: string, locale: Locale) {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/content`, {
+        const url = `${process.env.NEXT_PUBLIC_URL}/api/content`;
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,12 +25,13 @@ async function fetchParagraph(documentId: string, locale: Locale) {
             },
             // cache: 'no-cache'
         })
-
+        
         if (!response.ok) {
             throw new Error('Failed to fetch data')
         }
 
-        return response.json()
+        const ret = await response.json();
+        return ret.paragraph;
     }
     catch (error) {
         console.error("Error in fetchParagraph:", error)

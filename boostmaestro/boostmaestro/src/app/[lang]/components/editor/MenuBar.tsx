@@ -80,8 +80,8 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
 
     return (
-        <div className='sticky -mt-32 z-10 bg-white shadow-lg rounded-xl'>
-            <div className='flex flex-wrap items-center px-4 py-2 space-x-1 gap-2'>
+        <div className='top-0 pb-2'>
+            <div className=''>
                 <Button variant='ghost' size='sm'
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     disabled={
@@ -161,7 +161,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 </Button>
 
 
-
                 {/* Text colours */}
                 <Button variant='ghost' size="sm"
                     onClick={() => editor.chain().focus().setColor(hslToHex(getComputedStyle(document.documentElement).getPropertyValue('--primary'))).run()}
@@ -218,9 +217,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 >
                     <Pilcrow className='w-4 h-4' />
                 </Button>
-            </div>
-            <Separator orientation='vertical' />
-            <div className='flex flex-wrap items-center px-4 py-2 space-x-1'>
+
                 <Button variant='ghost' size="sm"
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
                     className={editor.isActive('bulletList') ? 'bg-secondary' : ''}

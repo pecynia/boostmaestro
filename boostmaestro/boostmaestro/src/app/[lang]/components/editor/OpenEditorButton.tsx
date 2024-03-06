@@ -11,7 +11,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/app/[lang]/components/ui/dialog";
-import EditorWrapper from './EditorWrapper';
+import EditorWrapper from '@/app/[lang]/components/editor/EditorWrapper';
 
 function OpenEditorButton({ initialLocale, documentId, className }: { initialLocale: Locale, documentId: string, className?: string }) {
     const { data: session } = useSession();
@@ -26,15 +26,12 @@ function OpenEditorButton({ initialLocale, documentId, className }: { initialLoc
                     </span>
                 </div>
             </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Edit Content</DialogTitle>
-                </DialogHeader>
-                    <EditorWrapper
-                        documentId={documentId}
-                        initialLocale={initialLocale}
-                        className={className}
-                    />
+            <DialogContent className='w-full h-full sm:h-fit sm:max-h-[70vh] max-w-5xl p-4 bg-white rounded-none sm:rounded-lg shadow-none sm:shadow-lg overflow-auto'>
+                <EditorWrapper
+                    documentId={documentId}
+                    initialLocale={initialLocale}
+                    className={className}
+                />
             </DialogContent>
         </Dialog>
     );

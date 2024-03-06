@@ -16,6 +16,7 @@ import { Button } from '@/app/[lang]/components/ui/button'
 import EditorLocaleSwitcher from '@/app/[lang]/components/editor/EditorLocaleSwitcher'
 import { Locale } from '@../../../i18n.config'
 import { saveParagraph } from '@/app/_actions'
+import { usePathname } from 'next/navigation'
 
 interface EditorComponentProps {
     initialContent?: string
@@ -79,11 +80,14 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
         onLocaleChange(newLocale) // Call the passed in onLocaleChange function
     }
 
+    // Pathname
+    const pathName = usePathname()
+
     // Make a post fetch request to secure API endpoint
     const handleSave = async () => {
         setIsSaving(true)
         try {
-            const res = await saveParagraph(documentId, currentLocale, JSON.stringify(editorContent))
+            const res = await saveParagraph(documentId, currentLocale, JSON.stringify(editorContent), pathName)
             if (res.success) {
                 toast.success('Saved successfully!')
             } else {
@@ -100,17 +104,23 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
     return (
         <div className='relative flex flex-col'>
             {editable && <MenuBar editor={editor} />}
-            <EditorContent editor={editor} />
+
+            <div>
+                <EditorContent editor={editor} />
+
+            </div>
+
+
             {editable && (
-                <div className='relative'>
+                <div className=''>
 
                     {/* Locale switcher, bottom left below the text area  */}
-                    <div className="absolute flex justify-start bottom-0 right-0 left-[50%] -mb-14 -ml-1/2" style={{ transform: 'translateX(-100%)' }} >
+                    <div className="flex items-center justify-between">
                         <EditorLocaleSwitcher currentLocale={currentLocale} onLocaleChange={handleLocaleChange} />
                     </div>
 
                     {/* Save button, bottom right below the text area  */}
-                    <div className="absolute flex justify-end bottom-0 right-0 -mb-14">
+                    <div className="absolute bottom-0 right-0">
                         {hasChanges && (
                             isSaving ?
                                 <Button disabled size="lg">

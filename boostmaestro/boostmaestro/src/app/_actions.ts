@@ -11,7 +11,7 @@ import { Locale } from '../../i18n.config'
 import RegistrationConfirmationEmail from '@/emails/registration-confirmation-email'
 import { saveParagraphJson } from '@/lib/utils/db'
 import { JSONContent } from '@tiptap/react'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 
 // ------------------ CONTACT FORMS ------------------
@@ -146,14 +146,14 @@ export async function getParagraph(id: string, locale: Locale) {
 }
 
 // Save paragraph to database
-export async function saveParagraph(documentId: string, locale: Locale, paragraphJson: string) {
+export async function saveParagraph(documentId: string, locale: Locale, paragraphJson: string, path: string) {
   const paragraph = JSON.parse(paragraphJson) as JSONContent
 
   try {
     const result = await saveParagraphJson(documentId, locale, paragraph)
 
     if (result.acknowledged) {
-      revalidateTag(`fetch-paragraph-${documentId}`)
+      revalidatePath(path)
     }
 
     return { success: true, data: result }

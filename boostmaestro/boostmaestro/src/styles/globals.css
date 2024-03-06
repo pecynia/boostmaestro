@@ -95,6 +95,10 @@
     @apply mt-2 mb-4 leading-6;
   }
 
+  p:empty::after {
+    content: "\00A0";
+  }
+
   h1 {
     @apply mt-4 mb-5 text-3xl font-exo font-bold;
   }
@@ -172,7 +176,7 @@ div[contenteditable="true"] {
   @apply outline-none;
 }
 div[contenteditable="true"]:focus {
-  @apply ring-2 ring-black rounded-xl;
+  @apply ring-2 ring-primary rounded-xl;
 }
 
 

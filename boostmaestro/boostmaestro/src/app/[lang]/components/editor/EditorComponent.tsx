@@ -41,6 +41,7 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
             StarterKit,
             Placeholder.configure({
                 placeholder: 'Start typing...',
+                emptyEditorClass: 'is-editor-empty',
             }),
             TextStyle,
             Color,
@@ -63,7 +64,7 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
         },
         editable: editable,
         onUpdate: ({ editor }) => {
-            const contentJson = generateJSON(editor.getHTML(), [StarterKit, TextStyle, Color, Link])
+            const contentJson = generateJSON(editor.getHTML(), [StarterKit, TextStyle, Color, Link, CustomBulletList])
             setEditorContent(contentJson)
             setHasChanges(true)
         },

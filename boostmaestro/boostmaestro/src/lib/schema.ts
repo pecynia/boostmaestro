@@ -93,3 +93,14 @@ export const CreateEventSchema = z.object({
     return i18n.locales.includes(value as Locale)
   }, { message: 'Language is invalid.' })).min(1, { message: 'At least one language is required.' }),
 })
+
+// ------------------ STORIES/BLOG ---------------------
+
+export const StoryContentSchema = z.object({
+  tags: z.string().optional(),
+  title: z.string().min(1, { message: 'Title is required.' }),
+  locale: z.string().min(1, { message: 'Language is required.' }).refine((value) => {
+    return i18n.locales.includes(value as Locale)
+  }, { message: 'Language is invalid.' }),
+  description: z.string().min(1, { message: 'Description is required.' })
+})

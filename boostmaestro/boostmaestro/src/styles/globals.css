@@ -87,6 +87,7 @@
 }
 
 
+
 /* Editable content */
 .tiptap {
   @apply p-4;
@@ -97,6 +98,14 @@
 
   p:empty::after {
     content: "\00A0";
+  }
+
+  p.is-editor-empty:first-child::before {
+    color: hsl(var(--muted-foreground));
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
   }
 
   h1 {
@@ -165,13 +174,7 @@
     @apply mt-8 mb-8 border-[1px] border-gray-300 w-full;
   }
 }
-.tiptap p.is-editor-empty:first-child::before {
-  color: #bdb6ad;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
+
 div[contenteditable="true"] {
   @apply outline-none;
 }

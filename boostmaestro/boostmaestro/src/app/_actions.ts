@@ -7,11 +7,13 @@ import ContactFormEmail from '@/emails/contact-form-email'
 import RegistrationFormEmail from '@/emails/registration-form-email'
 import { addEvent, getEventsWithRegistrations, getEvents, deleteEvent, updateEvent, getParagraphJson, deleteRegistration } from '@/lib/utils/db'
 import { CreateEventProps, EventData, EventProps, RegistrationFormProps } from '@/../typings'
-import { Locale } from '../../i18n.config'
+import { Locale } from '@../../../i18n.config'
 import RegistrationConfirmationEmail from '@/emails/registration-confirmation-email'
 import { saveParagraphJson } from '@/lib/utils/db'
 import { JSONContent } from '@tiptap/react'
 import { revalidatePath } from 'next/cache'
+import { Story, StoryContent, StorySummary } from '@/../typings'
+import { addStory } from '@/lib/utils/db'
 
 
 // ------------------ CONTACT FORMS ------------------
@@ -163,3 +165,15 @@ export async function saveParagraph(documentId: string, locale: Locale, paragrap
   }
 }
 
+
+// ------------------ STORY/BLOG ACTIONS ------------------
+
+// Save story to database
+export async function saveStory(data: Story) {
+  const result = await addStory(data)
+  if (result.acknowledged) {
+    return { success: true, data: result }
+  } else {
+    return { success: false, error: "Error saving story" }
+  }
+}

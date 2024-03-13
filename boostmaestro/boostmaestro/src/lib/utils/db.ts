@@ -1,10 +1,9 @@
 import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
-import NodeCache from 'node-cache'
 import { Locale } from '@/app/../../i18n.config'
 import { JSONContent } from '@tiptap/react'
 import { EventProps, CreateEventProps, EventData, RegistrationFormProps } from '@/../typings'
-import { revalidateTag } from 'next/cache'
-import { date } from 'zod'
+import { Story, StoryContent, StorySummary } from '@/../typings'
+
 
 // -------------------- DATABASE --------------------
 
@@ -94,6 +93,85 @@ export async function saveParagraphJson(documentId: string, locale: Locale, para
 
     return result
 }
+
+
+// -------------------- BLOG OPERATIONS --------------------
+
+
+
+// getStoryBySlug, to get the full story on the story page
+export async function getStoryBySlug(slug: string, lang: Locale): Promise<StoryContent> {
+    const db = await connectToDatabase()
+    const story: Story = await db.collection('stories').findOne({ slug })
+    const storyContent = story && story.content[lang] as StoryContent
+
+    return storyContent
+}
+
+// getStories, for overview on the blog page
+export async function getStories(lang: Locale): Promise<StorySummary[]> {
+    const db = await connectToDatabase()
+    const stories: Story[] = await db.collection('stories').find({}).toArray()
+    const storySummaries = stories.map(story => {
+        return {
+            tags: story.content[lang].tags,
+            slug: story.slug,
+            title: story.content[lang].title,
+            locale: story.content[lang].locale,
+            description: story.content[lang].description,
+            date: story.content[lang].date,
+            views: story.content[lang].views
+        } as StorySummary
+    }) as StorySummary[]
+
+    return storySummaries
+}
+
+
+// getAllStorySlugs, for generating static paths
+export async function getAllStorySlugs(): Promise<string[]> {
+    const db = await connectToDatabase()
+    const stories: Story[] = await db.collection('stories').find({}).toArray()
+    const slugs = stories.map(story => story.slug)
+
+    return slugs
+}
+
+// updateStory, to update the story in the database (remember to revalidate the path)
+export async function updateStory(slug: string, story: StoryContent) {
+    const db = await connectToDatabase()
+    const collection = db.collection('stories')
+
+    const filter = { slug: slug }
+    const update = { 
+        $set: { [`content.${story.locale}`]: story } 
+    }
+
+    const result = await collection.updateOne(filter, update, { upsert: true })
+
+    return result
+}
+
+// addStory, to add a new story to the database (remember to revalidate the path)
+export async function addStory(story: Story) {
+    const db = await connectToDatabase()
+    const collection = db.collection('stories')
+
+    const result = await collection.insertOne(story)
+
+    return result
+}
+
+// deleteStory, to delete a story from the database based on the slug (remember to revalidate the path)
+export async function deleteStory(slug: string) {
+    const db = await connectToDatabase()
+    const collection = db.collection('stories')
+
+    const result = await collection.deleteOne({ slug })
+
+    return result
+}
+
 
 // -------------------- EVENT OPERATIONS --------------------
 

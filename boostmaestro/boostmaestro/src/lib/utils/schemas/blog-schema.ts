@@ -1,4 +1,4 @@
-import { StoryContent } from '@/app/../../typings';
+import { StoryContent } from "@/lib/utils/db"
 import { Locale } from '@/app/../../i18n.config'
 
 export function addBlogJsonLd(lang: Locale, story: StoryContent) {
@@ -16,18 +16,18 @@ export function addBlogJsonLd(lang: Locale, story: StoryContent) {
         "author": {
           "@type": "Person",
           "url": "
-          "name": "Hot Topics Times"
+          "name": "Guus Krabbenborg"
         },
         "publisher": {
           "@type": "Organization",
-          "name": "Hot Topics Times",
+          "name": "ERP Masterclasses",
           "logo": {
             "@type": "ImageObject",
             "url": "{$process.env.NEXT_PUBLIC_BASE_URL}/logo.png"
           }
         },
         "datePublished": "${story.date}",
-        "dateModified": "${story.date}"
+        "dateModified": "${story.dateModified}"
       }
     `,}
   }

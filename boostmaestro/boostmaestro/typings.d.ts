@@ -112,7 +112,7 @@ export type Story = {
 }
 
 export type StoryContent = {
-    tags: string | string[] | null | undefined
+    tags: string[] | null
     title: string
     locale: Locale
     description: string

@@ -114,13 +114,13 @@ export async function getStories(lang: Locale): Promise<StorySummary[]> {
     const stories: Story[] = await db.collection('stories').find({}).toArray()
     const storySummaries = stories.map(story => {
         return {
-            tags: story.content[lang].tags,
+            tags: story.content[lang]?.tags,
             slug: story.slug,
-            title: story.content[lang].title,
-            locale: story.content[lang].locale,
-            description: story.content[lang].description,
-            date: story.content[lang].date,
-            views: story.content[lang].views
+            title: story.content[lang]?.title,
+            locale: story.content[lang]?.locale,
+            description: story.content[lang]?.description,
+            date: story.content[lang]?.date,
+            views: story.content[lang]?.views
         } as StorySummary
     }) as StorySummary[]
 

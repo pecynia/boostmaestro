@@ -25,16 +25,24 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/app/[lang]/components/ui/carousel"
+import { toast } from 'sonner'
 
-
-const AddStory: React.FC = () => {
+const AddStory: React.FC<{ lang: Locale }> = ({ lang }) => {
   const { data: session } = useSession()
   const [slug, setSlug] = useState('')
   const [isSlugEditorOpen, setIsSlugEditorOpen] = useState(false)
   const [selectedLocale, setSelectedLocale] = useState<Locale | null>(null)
   const [isSelectingLanguage, setIsSelectingLanguage] = useState(false)
   const [isFillingForm, setIsFillingForm] = useState(false)
-  const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<StoryContent>({
+
+  const initialStoryContent: Record<Locale, StoryContent | null> = i18n.locales.reduce((acc, locale) => {
+    acc[locale] = null
+    return acc
+  }, {} as Record<Locale, StoryContent | null>)
+
+  const [storyContent, setStoryContent] = useState<Record<Locale, StoryContent | null>>(initialStoryContent)
+
+  const { register, handleSubmit, watch, resetField, formState: { errors, isSubmitting } } = useForm<StoryContent>({
     resolver: zodResolver(StoryContentSchema),
     defaultValues: {
       title: '',
@@ -56,6 +64,14 @@ const AddStory: React.FC = () => {
     }
   }, [title, isSlugEditorOpen])
 
+  useEffect(() => {
+    const initialContent = i18n.locales.reduce((acc, locale) => {
+      acc[locale] = null
+      return acc
+    }, {} as Record<Locale, StoryContent | null>)
+    setStoryContent(initialContent)
+  }, [])
+
   const processForm: SubmitHandler<StoryContent> = async (data) => {
     if (!session) {
       console.error("No session found!")
@@ -65,23 +81,41 @@ const AddStory: React.FC = () => {
     try {
       const newStoryData = {
         slug,
-        content: { [data.locale]: data }
+        content: Object.entries(storyContent)
+          .filter(([_, content]) => content !== null)
+          .reduce((acc, [locale, content]) => {
+            acc[locale as Locale] = {
+              ...data,
+              content: content?.content!,
+            }
+            return acc
+          }, {} as Record<Locale, StoryContent>),
       } as Story
 
       const result = await saveStory(newStoryData)
 
       if (result.success) {
         console.log("Story added successfully")
+        toast.success("Story added successfully")
       } else {
         console.error("Failed to add story", result.error)
+        toast.error("Failed to add story")
       }
     } catch (error) {
       console.error("Error saving story:", error)
+      toast.error("Error saving story")
     }
   }
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSlug(e.target.value)
+  }
+
+  const handleStoryContentChange = (content: StoryContent) => {
+    setStoryContent(prevContent => ({
+      ...prevContent,
+      [selectedLocale!]: content,
+    }))
   }
 
   if (!session) {
@@ -99,9 +133,9 @@ const AddStory: React.FC = () => {
           <div className="grid grid-cols-3 gap-4 pt-4">
             {i18n.locales.map((locale) => (
               <Button key={locale} onClick={() => {
-                setSelectedLocale(locale);
-                setIsFillingForm(true);
-                setIsSelectingLanguage(false);
+                setSelectedLocale(locale)
+                setIsFillingForm(true)
+                setIsSelectingLanguage(false)
               }}
                 variant='ghost'
                 className="flex flex-col items-center justify-center py-2 h-full"
@@ -116,8 +150,8 @@ const AddStory: React.FC = () => {
                 <span>
                   {
                     (() => {
-                      const languageObject = languages.all.find(lang => lang.alpha2 === locale);
-                      return languageObject ? languageObject.name : locale.toUpperCase();
+                      const languageObject = languages.all.find(lang => lang.alpha2 === locale)
+                      return languageObject ? languageObject.name : locale.toUpperCase()
                     })()
                   }
                 </span>
@@ -127,7 +161,7 @@ const AddStory: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {isFillingForm && (
+      {isFillingForm && selectedLocale && (
         <Dialog open={isFillingForm} onOpenChange={setIsFillingForm}>
           <DialogContent className='h-[80vh] min-w-[80vw] flex flex-col gap-3'>
             <DialogTitle>Add Story</DialogTitle>
@@ -161,7 +195,29 @@ const AddStory: React.FC = () => {
                 <Textarea {...register('description')} placeholder='Description' className='text-md' />
                 {errors.description && <p className='text-red-500 text-sm -mt-2'>{errors.description.message}</p>}
 
-                <EditorWrapper documentId={slug} initialLocale={selectedLocale || i18n.defaultLocale} />
+                <EditorWrapper
+                  documentId={slug}
+                  initialLocale={selectedLocale}
+                  onContentChange={handleStoryContentChange}
+                  disableSave={true}
+                />
+
+                <Carousel>
+                  {i18n.locales.map((locale) => (
+                    <CarouselItem key={locale}>
+                      <Button
+                        onClick={() => {
+                          setSelectedLocale(locale)
+                          resetField('content', { defaultValue: storyContent[locale]?.content })
+                        }}
+                      >
+                        Edit {languages.all.find(lang => lang.alpha2 === locale)?.name || locale.toUpperCase()}
+                      </Button>
+                    </CarouselItem>
+                  ))}
+                  <CarouselPrevious>Previous</CarouselPrevious>
+                  <CarouselNext>Next</CarouselNext>
+                </Carousel>
 
                 <Button type='submit' disabled={isSubmitting}>
                   {isSubmitting ? 'Adding...' : 'Add Story'}

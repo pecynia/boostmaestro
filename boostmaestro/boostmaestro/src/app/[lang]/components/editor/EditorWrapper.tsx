@@ -15,6 +15,7 @@ import { Locale } from "@../../../i18n.config"
 import { twMerge } from "tailwind-merge"
 import { motion } from "framer-motion"
 import { getParagraph } from "@/app/_actions"
+import { StoryContent } from '@/../typings'
 
 export interface EditorWrapperProps {
     documentId: string
@@ -22,9 +23,11 @@ export interface EditorWrapperProps {
     buttonText?: string
     initialLocale: Locale
     className?: string
+    disableSave?: boolean
+    onContentChange: (content: StoryContent) => void
 }
 
-const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonText, initialLocale, className }) => {
+const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonText, initialLocale, className, disableSave, onContentChange }) => {
     const { status, data: session } = useSession()
     const [fetchedContent, setFetchedContent] = useState('')
 
@@ -50,6 +53,10 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonT
         handleLocaleChange(currentLocale)
     }, [currentLocale, handleLocaleChange])
 
+    const handleContentChange = useCallback((content: StoryContent) => {
+        onContentChange(content)
+    }, [onContentChange])
+
     if (status === "loading") {
         return (
             <motion.div className="flex justify-center items-center mt-5 w-full h-full">
@@ -66,6 +73,8 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonT
                 editable={!!session}
                 initialContent={fetchedContent}
                 onLocaleChange={setCurrentLocale}
+                onContentChange={handleContentChange}
+                disableSave={disableSave}
             />
             {link && buttonText && (
                 <div className="px-4 flex justify-center">

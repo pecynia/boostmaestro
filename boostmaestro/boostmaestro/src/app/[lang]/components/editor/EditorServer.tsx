@@ -6,7 +6,7 @@ import EditorContent from '@/app/[lang]/components/editor/EditorContent'
 import OpenEditorButton from '@/app/[lang]/components/editor/OpenEditorButton'
 import { JSONContent } from '@tiptap/react'
 
-type Reponse = {
+export type Reponse = {
     _id: string
     paragraphJson: JSONContent
 } | null

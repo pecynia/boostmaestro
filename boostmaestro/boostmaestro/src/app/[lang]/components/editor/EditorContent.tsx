@@ -9,13 +9,10 @@ import CustomBulletList from './CustomBulletList'
 import Link from '@tiptap/extension-link'
 import { generateHTML } from '@tiptap/html'
 import { twMerge } from 'tailwind-merge'
+import { Reponse } from '@/app/[lang]/components/editor/EditorServer'
 
-type Result = {
-    _id: string
-    paragraphJson: any
-}
+function EditorContent({ result, className }: { result: Reponse, className?: string}) {
 
-function EditorContent({ result, className }: { result: Result | null, className?: string}) {
     const output = useMemo(() => {
         if (result && result.paragraphJson) {
             return generateHTML(result.paragraphJson, [

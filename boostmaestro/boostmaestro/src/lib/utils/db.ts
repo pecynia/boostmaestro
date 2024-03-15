@@ -1,7 +1,7 @@
 import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb'
 import { Locale } from '@/app/../../i18n.config'
 import { JSONContent } from '@tiptap/react'
-import { EventProps, CreateEventProps, EventData, RegistrationFormProps } from '@/../typings'
+import { EventProps, CreateEventProps, EventData, RegistrationFormProps, StoryServer } from '@/../typings'
 import { Story, StoryContent, StorySummary } from '@/../typings'
 
 
@@ -102,7 +102,7 @@ export async function saveParagraphJson(documentId: string, locale: Locale, para
 // getStoryBySlug, to get the full story on the story page
 export async function getStoryBySlug(slug: string, lang: Locale): Promise<StoryContent> {
     const db = await connectToDatabase()
-    const story: Story = await db.collection('stories').findOne({ slug })
+    const story: StoryServer = await db.collection('stories').findOne({ slug })
     const storyContent = story && story.content[lang] as StoryContent
 
     return storyContent
@@ -111,7 +111,7 @@ export async function getStoryBySlug(slug: string, lang: Locale): Promise<StoryC
 // getStories, for overview on the blog page
 export async function getStories(lang: Locale): Promise<StorySummary[]> {
     const db = await connectToDatabase()
-    const stories: Story[] = await db.collection('stories').find({}).toArray()
+    const stories: StoryServer[] = await db.collection('stories').find({}).toArray()
     const storySummaries = stories.map(story => {
         return {
             tags: story.content[lang]?.tags,
@@ -131,7 +131,7 @@ export async function getStories(lang: Locale): Promise<StorySummary[]> {
 // getAllStorySlugs, for generating static paths
 export async function getAllStorySlugs(): Promise<string[]> {
     const db = await connectToDatabase()
-    const stories: Story[] = await db.collection('stories').find({}).toArray()
+    const stories: StoryServer[] = await db.collection('stories').find({}).toArray()
     const slugs = stories.map(story => story.slug)
 
     return slugs

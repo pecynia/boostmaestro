@@ -182,6 +182,11 @@ div[contenteditable="true"]:focus {
   @apply ring-2 ring-primary rounded-xl;
 }
 
+/* Increase specificity by repeating the class */
+.editor-wrapper.editor-wrapper div[contenteditable="true"]:focus {
+  @apply ring-0; /* This will remove the ring */
+}
+
 
 
 /* Lenis */

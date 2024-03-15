@@ -103,7 +103,15 @@ export type ProductResponse = {
 }
 
 // ------------------ BLOG ------------------
-// Get document given id
+
+export type StoryServer = {
+    _id: ObjectId
+    slug: string
+    content: {
+        [key in Locale]: StoryContent
+    }
+}
+
 export type Story = {
     slug: string
     content: {

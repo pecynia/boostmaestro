@@ -23,11 +23,9 @@ export interface EditorWrapperProps {
     buttonText?: string
     initialLocale: Locale
     className?: string
-    disableSave?: boolean
-    onContentChange: (content: StoryContent) => void
 }
 
-const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonText, initialLocale, className, disableSave, onContentChange }) => {
+const EditorWrapper: React.FC<EditorWrapperProps> = ({ documentId, link, buttonText, initialLocale, className }) => {
     const { status, data: session } = useSession()
     const [fetchedContent, setFetchedContent] = useState('')
 

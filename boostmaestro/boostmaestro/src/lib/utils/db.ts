@@ -97,6 +97,18 @@ export async function saveParagraphJson(documentId: string, locale: Locale, para
 
 // -------------------- BLOG OPERATIONS --------------------
 
+// incrementStoryViews, to increment the view count of a story
+export async function incrementStoryViews(slug: string, lang: Locale) {
+    const db = await connectToDatabase()
+    const collection = db.collection('stories')
+
+    const filter = { slug }
+    const update = { $inc: { [`content.${lang}.views`]: 1 } }
+
+    const result = await collection.updateOne(filter, update)
+
+    return result
+}
 
 
 // getStoryBySlug, to get the full story on the story page
@@ -106,6 +118,14 @@ export async function getStoryBySlug(slug: string, lang: Locale): Promise<StoryC
     const storyContent = story && story.content[lang] as StoryContent
 
     return storyContent
+}
+
+// getStory, to get the full story on the story page
+export async function getStory(slug: string): Promise<StoryServer> {
+    const db = await connectToDatabase()
+    const story: StoryServer = await db.collection('stories').findOne({ slug })
+
+    return story
 }
 
 // getStories, for overview on the blog page
@@ -138,16 +158,16 @@ export async function getAllStorySlugs(): Promise<string[]> {
 }
 
 // updateStory, to update the story in the database (remember to revalidate the path)
-export async function updateStory(slug: string, story: StoryContent) {
+export async function updateStory(story: StoryServer) {
     const db = await connectToDatabase()
     const collection = db.collection('stories')
 
-    const filter = { slug: slug }
-    const update = { 
-        $set: { [`content.${story.locale}`]: story } 
-    }
+    const { _id, ...storyProps } = story
 
-    const result = await collection.updateOne(filter, update, { upsert: true })
+    const filter = { _id: new ObjectId(_id) }
+    const update = { $set: storyProps }
+
+    const result = await collection.updateOne(filter, update)
 
     return result
 }

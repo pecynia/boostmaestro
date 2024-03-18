@@ -6,14 +6,14 @@ import { ContactFormSchema, RegistrationFormSchema } from '@/lib/schema'
 import ContactFormEmail from '@/emails/contact-form-email'
 import RegistrationFormEmail from '@/emails/registration-form-email'
 import { addEvent, getEventsWithRegistrations, getEvents, deleteEvent, updateEvent, getParagraphJson, deleteRegistration } from '@/lib/utils/db'
-import { CreateEventProps, EventData, EventProps, RegistrationFormProps } from '@/../typings'
+import { CreateEventProps, EventData, EventProps, RegistrationFormProps, StoryServer } from '@/../typings'
 import { Locale } from '@../../../i18n.config'
 import RegistrationConfirmationEmail from '@/emails/registration-confirmation-email'
 import { saveParagraphJson } from '@/lib/utils/db'
 import { JSONContent } from '@tiptap/react'
 import { revalidatePath } from 'next/cache'
-import { Story, StoryContent, StorySummary } from '@/../typings'
-import { addStory } from '@/lib/utils/db'
+import { Story } from '@/../typings'
+import { addStory, deleteStory, updateStory, getStory } from '@/lib/utils/db'
 
 
 // ------------------ CONTACT FORMS ------------------
@@ -176,4 +176,31 @@ export async function saveStory(data: Story) {
   } else {
     return { success: false, error: "Error saving story" }
   }
+}
+
+// Delete story from database
+export async function removeStory(slug: string, paths: string[]) {
+  const result = await deleteStory(slug)
+  if (result.acknowledged) {
+    paths.forEach((path) => revalidatePath(path))
+    return { success: true, data: result }
+  } else {
+    return { success: false, error: "Error deleting story" }
+  }
+}
+
+// Update story in database
+export async function editStory(data: StoryServer, paths: string[]) {
+  const result = await updateStory(data)
+  if (result.acknowledged) {
+    paths.forEach((path) => revalidatePath(path))
+    return { success: true, data: result }
+  } else {
+    return { success: false, error: "Error updating story" }
+  }
+}
+
+// Get fullStory
+export async function getFullStory(slug: string) {
+  return JSON.parse(JSON.stringify(await getStory(slug))) as StoryServer
 }

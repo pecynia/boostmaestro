@@ -138,7 +138,7 @@ const AddStory: React.FC<{ lang: Locale }> = ({ lang }) => {
         }, {} as Record<Locale, StoryContent>),
       }
 
-      const result = await saveStory(newStoryData)
+      const result = await saveStory(JSON.parse(JSON.stringify(newStoryData)))
 
       if (result.success) {
         console.log("Story added successfully")
@@ -277,7 +277,7 @@ const AddStory: React.FC<{ lang: Locale }> = ({ lang }) => {
                         {errors.description && <p className='text-red-500 text-sm -mt-2'>{errors.description.message}</p>}
 
                         <div className='editor-wrapper w-full rounded-md border border-input bg-transparent px-3 py-2 shadow-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'>
-                          <EditorComponent
+                          {session && <EditorComponent
                             currentLocale={locale}
                             documentId={slug}
                             editable={!!session}
@@ -290,10 +290,13 @@ const AddStory: React.FC<{ lang: Locale }> = ({ lang }) => {
                             onContentChange={handleStoryContentChange}
                             disableSave={true}
                           />
+                          }
                         </div>
 
-                        <Button onClick={handleSaveLanguage} className="mt-2" variant='outline'>
-                          Save {languages.all.find(lang => lang.alpha2 === locale)?.name || locale.toUpperCase()}
+                        <Button type="button" onClick={handleSaveLanguage} className="mt-2" variant='outline'>
+                          { !storyContent[locale].saved ?
+                            `Mark ${languages.all.find(lang => lang.alpha2 === locale)?.name || locale.toUpperCase()} as done` : 'Marked as done'
+                          }
                         </Button>
                       </form>
                     </div>

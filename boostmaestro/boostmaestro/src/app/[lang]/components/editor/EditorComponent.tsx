@@ -91,7 +91,7 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
 
     const handleLocaleChange = (newLocale: Locale) => {
         if (onLocaleChange)
-        onLocaleChange(newLocale) // Call the passed in onLocaleChange function
+            onLocaleChange(newLocale) // Call the passed in onLocaleChange function
     }
 
     // Pathname

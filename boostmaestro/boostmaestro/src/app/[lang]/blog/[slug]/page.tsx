@@ -4,6 +4,7 @@ import { Locale } from '@../../../i18n.config'
 import EditorContent from '@/app/[lang]/components/editor/EditorContent'
 import { StoryContent } from '@../../../../../typings'
 import { Reponse } from '@/app/[lang]/components/editor/EditorServer'
+import ViewCounter from '@/app/[lang]/components/ViewCounter'
 
 export async function generateStaticParams() {
     const slugs = await getAllStorySlugs()
@@ -28,11 +29,15 @@ export default async function Page({
     } as Reponse
 
     return (
-        <div>
-            <h1 className='text-3xl'>{story.title}</h1>
-            <p>{story.description}</p>
-            <EditorContent result={contentResult} />
-        </div>
+        <>
+            <ViewCounter slug={slug} locale={lang} />
+            <article>
+                <h1 className='text-3xl'>{story.title}</h1>
+                <p>{story.description}</p>
+                <EditorContent result={JSON.parse(JSON.stringify(contentResult))} />
+            </article>
+        </>
+
     )
 
 }

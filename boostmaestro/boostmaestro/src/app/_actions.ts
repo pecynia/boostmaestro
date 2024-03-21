@@ -169,9 +169,10 @@ export async function saveParagraph(documentId: string, locale: Locale, paragrap
 // ------------------ STORY/BLOG ACTIONS ------------------
 
 // Save story to database
-export async function saveStory(data: Story) {
+export async function saveStory(data: Story, paths: string[]) {
   const result = await addStory(data)
   if (result.acknowledged) {
+    paths.forEach((path) => revalidatePath(path))
     return { success: true, data: result }
   } else {
     return { success: false, error: "Error saving story" }

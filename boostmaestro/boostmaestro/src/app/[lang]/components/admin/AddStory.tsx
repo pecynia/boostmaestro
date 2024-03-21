@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/[lang]/components/ui/tabs"
 import { CheckCircle } from 'lucide-react'
-import EditorComponent from '../editor/EditorComponent'
+import EditorComponent from '@/app/[lang]/components/editor/EditorComponent'
 import { generateHTML } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
@@ -138,7 +138,11 @@ const AddStory: React.FC<{ lang: Locale }> = ({ lang }) => {
         }, {} as Record<Locale, StoryContent>),
       }
 
-      const result = await saveStory(JSON.parse(JSON.stringify(newStoryData)))
+      const paths = [
+        `${process.env.NEXT_PUBLIC_URL}/${lang}/blog`,
+        `${process.env.NEXT_PUBLIC_URL}/${lang}/blog/${slug}`
+      ]
+      const result = await saveStory(JSON.parse(JSON.stringify(newStoryData)), paths)
 
       if (result.success) {
         console.log("Story added successfully")

@@ -34,6 +34,9 @@
   "home": {
     "description": ""
   },
+  "notFound": {
+    "postNotFound": "Post niet gevonden"
+  },
   "benefits": {
     "title": "Vergroot Uw Kans op Succes",
     "description": "Ontdek hoe u zich beter kunt voorbereiden op verandering",

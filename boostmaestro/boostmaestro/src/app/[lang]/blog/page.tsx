@@ -37,12 +37,12 @@ export default async function Page({
                         return null
                     }
                     return (
-                        <Card key={slug} className="shadow-md">
+                        <Card key={slug} className="shadow-right-tertiary border-0">
                             <CardHeader>
                                 <div className="flex items-center justify-between">
-                                    <CardTitle>
+                                    <CardTitle className="text-xl font-bold">
                                         <Link href={`/${lang}/blog/${slug}`}>
-                                            <span className="text-blue-500 hover:underline">
+                                            <span className="text-primary hover:underline">
                                                 {title}
                                             </span>
                                         </Link>

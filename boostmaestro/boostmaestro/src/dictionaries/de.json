@@ -34,6 +34,9 @@
   "home": {
     "description": ""
   },
+  "notFound": {
+    "postNotFound": "Post nicht gefunden"
+  },
   "benefits": {
     "title": "Steigern Sie Ihre Erfolgschancen",
     "description": "Erfahren Sie, wie Sie sich besser auf Veränderungen vorbereiten können",
